@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useCartContext } from "@/utilities/context/context";
 import CartItem from "./CartItem";
 import { FaShoppingCart } from "react-icons/fa";
+import getStripe from "@/utilities/lib/getStripe";
 const { motion } = require("framer-motion");
 
 const cards = {
@@ -10,15 +11,15 @@ const cards = {
     opacity: 1,
     transition: {
       delayChildren: 0.3,
-      staggerChildren: 0.1,
+      staggerChildren: 0.2,
     },
   },
+  remove: { opacity: 0, scale: 0.8, transition: { duration: 5 } },
 };
 
 const card = {
   hidden: { opacity: 0, scale: 0.8 },
   show: { opacity: 1, scale: 1 },
-  remove: { opacity: 0, scale: 0.8 },
 };
 
 const CartWrapper = styled(motion.div)`
@@ -31,7 +32,6 @@ const CartWrapper = styled(motion.div)`
   z-index: 100;
   display: flex;
   justify-content: flex-end;
-  /* display: none; */
 `;
 
 const Cards = styled(motion.div)``;
@@ -74,7 +74,7 @@ const CartIcon = styled(FaShoppingCart)`
   color: var(--secondary);
 `;
 
-const TotalContainer = styled.div`
+const TotalContainer = styled(motion.div)`
   margin-top: 40px;
 `;
 
@@ -98,7 +98,7 @@ const PurchaseButton = styled.button`
 
 const Cart = () => {
   // cart context
-  const { cartItems, toggleCart, showCart } = useCartContext();
+  const { cartItems, toggleCart } = useCartContext();
 
   const cartIsEmpty = cartItems && cartItems.length < 1;
 
@@ -106,9 +106,30 @@ const Cart = () => {
     .reduce((acc, item) => acc + item.price * item.qty, 0)
     .toFixed(2);
 
+  /**
+   * handles outside cart clicks to toggle cart
+   * @param {*} event
+   */
   const handleOutsideClick = (event) => {
     toggleCart();
     event.stopPropagation();
+  };
+
+  /**
+   * handle stripe payments
+   */
+  const handleCheckout = async () => {
+    const stripe = await getStripe();
+    if (!stripe) console.log("cannot find stripe instance");
+
+    const response = await fetch("/api/stripe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(cartItems),
+    });
+
+    const data = await response.json();
+    await stripe.redirectToCheckout({ sessionId: data.id });
   };
 
   return (
@@ -130,21 +151,23 @@ const Cart = () => {
           <EmptyContainer
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: "tween", delay: 0.3 }}
+            transition={{ type: "tween", delay: 0.2 }}
           >
             <EmptyCartText>Your Cart is empty!</EmptyCartText>
             <CartIcon />
           </EmptyContainer>
         )}
-        <Cards variants={cards} initial={"hidden"} animate={"show"}>
+        <Cards layout variants={cards} initial={"hidden"} animate={"show"}>
           {!cartIsEmpty && (
             <>
               {cartItems.map((item) => (
                 <CartItem variants={card} key={item.title} product={item} />
               ))}
-              <TotalContainer>
+              <TotalContainer layout>
                 <CartTotal>Subtotal: ${totalCartAmount}</CartTotal>
-                <PurchaseButton>Purchase</PurchaseButton>
+                <PurchaseButton onClick={handleCheckout}>
+                  Purchase
+                </PurchaseButton>
               </TotalContainer>
             </>
           )}

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 import { useCartContext } from "@/utilities/context/context";
-const { motion, AnimatePresence } = require("framer-motion");
+const { motion } = require("framer-motion");
 
 const QTY_OF_ONE = 1;
 
@@ -98,28 +98,26 @@ const CartItem = ({ product, variants }) => {
   };
 
   return (
-    <AnimatePresence>
-      <CartItemContainer variants={variants}>
-        <CartItemImage
-          src={image.data.attributes.formats.thumbnail.url}
-          alt={title}
-        />
-        <CartInfoContainer>
-          <ProductTitle>{title}</ProductTitle>
-          <ProductPrice>${Number(price).toFixed(2)}</ProductPrice>
-          <QuantityContainer>
-            <QuantityText>Quantity</QuantityText>
-            <OrderButton onClick={handleItemDecrement}>
-              <MinusIcon />
-            </OrderButton>
-            <CartQuantity>{qty}</CartQuantity>
-            <OrderButton onClick={handleItemIncrement}>
-              <PlusIcon />
-            </OrderButton>
-          </QuantityContainer>
-        </CartInfoContainer>
-      </CartItemContainer>
-    </AnimatePresence>
+    <CartItemContainer variants={variants} layout>
+      <CartItemImage
+        src={image.data.attributes.formats.thumbnail.url}
+        alt={title}
+      />
+      <CartInfoContainer>
+        <ProductTitle>{title}</ProductTitle>
+        <ProductPrice>${Number(price).toFixed(2)}</ProductPrice>
+        <QuantityContainer>
+          <QuantityText>Quantity</QuantityText>
+          <OrderButton onClick={handleItemDecrement}>
+            <MinusIcon />
+          </OrderButton>
+          <CartQuantity>{qty}</CartQuantity>
+          <OrderButton onClick={handleItemIncrement}>
+            <PlusIcon />
+          </OrderButton>
+        </QuantityContainer>
+      </CartInfoContainer>
+    </CartItemContainer>
   );
 };
 

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { FiShoppingBag } from "react-icons/fi";
 import Link from "next/link";
 import { useCartContext } from "@/utilities/context/context";
-const { AnimatePresence } = require("framer-motion");
+const { motion, AnimatePresence } = require("framer-motion");
 
 import Cart from "../cart/Cart";
 
@@ -41,7 +41,7 @@ const NavItem = styled.div`
   cursor: pointer;
 `;
 
-const CartBadge = styled.span`
+const CartBadge = styled(motion.span)`
   background: #ff2626;
   color: white;
   width: 16px;
@@ -74,7 +74,11 @@ const Navbar = () => {
       <HomeIcon href={"/"}>Casa</HomeIcon>
       <NavItemsContainer>
         <NavItem onClick={toggleCart}>
-          {totalQty > 0 && <CartBadge>{totalQty}</CartBadge>}
+          {totalQty > 0 && (
+            <CartBadge initial={{ scale: 0 }} animate={{ scale: 1 }}>
+              {totalQty}
+            </CartBadge>
+          )}
           <CartIcon />
           <CartHeader>Cart</CartHeader>
         </NavItem>
