@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
-import { useCartContext } from "@/utilities/context/context";
+import { useCartContext } from "../../utilities/context/context";
 const { motion } = require("framer-motion");
 
 const QTY_OF_ONE = 1;

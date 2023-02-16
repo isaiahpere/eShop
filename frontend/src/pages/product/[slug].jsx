@@ -3,8 +3,7 @@ import { useRouter } from "next/router";
 import styled from "styled-components";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 import { GET_PRODUCT_QUERY } from "../../utilities/lib/queries";
-import { useCartContext } from "@/utilities/context/context";
-import { motion } from "framer-motion";
+import { useCartContext } from "../../utilities/context/context";
 
 const MainContainer = styled.div`
   display: flex;

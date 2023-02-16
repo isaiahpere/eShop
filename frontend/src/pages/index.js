@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useQuery } from "urql";
-import { PRODUCTS_QUERY } from "@/utilities/lib/queries";
+import { PRODUCTS_QUERY } from "../utilities/lib/queries";
 import styled from "styled-components";
 
 import Product from "../components/product/Product";
@@ -38,7 +38,6 @@ export default function Home() {
     return <div>Not able to fetch data at the moment</div>;
   }
   const products = data.products.data;
-  console.log(data);
 
   return (
     <>

@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import { useCartContext } from "@/utilities/context/context";
+import { useCartContext } from "../../utilities/context/context";
 import CartItem from "./CartItem";
 import { FaShoppingCart } from "react-icons/fa";
-import getStripe from "@/utilities/lib/getStripe";
+import getStripe from "../../utilities/lib/getStripe";
 const { motion } = require("framer-motion");
 
+// framer-motion-parent
 const cards = {
   hidden: { opacity: 0 },
   show: {
@@ -16,7 +17,7 @@ const cards = {
   },
   remove: { opacity: 0, scale: 0.8, transition: { duration: 5 } },
 };
-
+// framer-motion-children
 const card = {
   hidden: { opacity: 0, scale: 0.8 },
   show: { opacity: 1, scale: 1 },

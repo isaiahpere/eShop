@@ -1,13 +1,15 @@
 import styled from "styled-components";
 import { FiShoppingBag } from "react-icons/fi";
 import Link from "next/link";
-import { useCartContext } from "@/utilities/context/context";
+import { useUser } from "@auth0/nextjs-auth0/client";
 const { motion, AnimatePresence } = require("framer-motion");
 
+import { useCartContext } from "../../utilities/context/context";
+import User from "../User";
 import Cart from "../cart/Cart";
 
 const NavContainer = styled.div`
-  height: 15vh;
+  height: 10vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -58,21 +60,28 @@ const CartBadge = styled(motion.span)`
 `;
 
 const CartIcon = styled(FiShoppingBag)`
-  font-size: 18px;
+  font-size: 20px;
 `;
 
 const CartHeader = styled.h3`
-  font-size: 14px;
+  font-size: 12px;
   padding: 6px;
 `;
 
 const Navbar = () => {
+  // user
+  const { user, error, isLoading } = useUser();
+
+  // if (user) console.log(user);
   const { showCart, toggleCart, totalQty } = useCartContext();
 
   return (
     <NavContainer>
       <HomeIcon href={"/"}>Casa</HomeIcon>
       <NavItemsContainer>
+        <NavItem>
+          <User />
+        </NavItem>
         <NavItem onClick={toggleCart}>
           {totalQty > 0 && (
             <CartBadge initial={{ scale: 0 }} animate={{ scale: 1 }}>

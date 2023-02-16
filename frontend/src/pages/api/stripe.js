@@ -1,9 +1,14 @@
 import Stripe from "stripe";
+import { getSession } from "@auth0/nextjs-auth0";
 
 // new stripe instance with secret
 const stripeInstance = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
 
 const stripeApi = async (req, res) => {
+  const session = await getSession(req, res);
+  const user = session?.user;
+  const stripeId = user["http://localhost:3000/stripe_customer_id"];
+
   // POST METHOD
   if (req.method === "POST") {
     // check if stripe instance exist
@@ -12,14 +17,13 @@ const stripeApi = async (req, res) => {
       return;
     }
 
-    console.log(req.headers);
-
     // More about stripe checkout session: https://stripe.com/docs/api/checkout/sessions/object
     try {
       // create checkout session
       const session = await stripeInstance.checkout.sessions.create({
         submit_type: "pay",
         mode: "payment",
+        customer: stripeId,
         payment_method_types: ["card"],
         shipping_address_collection: {
           allowed_countries: ["US", "CA"],
@@ -36,12 +40,12 @@ const stripeApi = async (req, res) => {
               },
               unit_amount: item.price * 100,
             },
-            adjustable_quantity: { enabled: true, minimum: 0, maximum: 10 },
             quantity: item.qty,
+            adjustable_quantity: { enabled: true, minimum: 0, maximum: 10 },
           };
         }),
-        success_url: `${req.headers.referer}`,
-        cancel_url: `${req.headers.referer}`,
+        success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${req.headers.origin}/canceled`,
       });
 
       res.status(200).json(session);
