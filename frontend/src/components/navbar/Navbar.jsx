@@ -2,11 +2,13 @@ import styled from "styled-components";
 import { FiShoppingBag } from "react-icons/fi";
 import Link from "next/link";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import Image from "next/image";
 const { motion, AnimatePresence } = require("framer-motion");
 
 import { useCartContext } from "../../utilities/context/context";
 import User from "../User";
 import Cart from "../cart/Cart";
+import logo from "../../../public/assets/logo.png";
 
 const NavContainer = styled.div`
   height: 10vh;
@@ -15,8 +17,13 @@ const NavContainer = styled.div`
   align-items: center;
 
   @media (min-width: 1024px) {
-    margin: 0 40px;
+    margin: 0 60px;
   }
+`;
+
+const Logo = styled.img`
+  width: 20px;
+  height: 20px;
 `;
 
 const HomeIcon = styled(Link)`
@@ -77,7 +84,9 @@ const Navbar = () => {
 
   return (
     <NavContainer>
-      <HomeIcon href={"/"}>Casa</HomeIcon>
+      <HomeIcon href={"/"}>
+        <Image src={logo} width={40} />
+      </HomeIcon>
       <NavItemsContainer>
         <NavItem>
           <User />

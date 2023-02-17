@@ -3,6 +3,7 @@ import { useCartContext } from "../../utilities/context/context";
 import CartItem from "./CartItem";
 import { FaShoppingCart } from "react-icons/fa";
 import getStripe from "../../utilities/lib/getStripe";
+import { CgClose } from "react-icons/cg";
 const { motion } = require("framer-motion");
 
 // framer-motion-parent
@@ -37,8 +38,33 @@ const CartWrapper = styled(motion.div)`
 
 const Cards = styled(motion.div)``;
 
+const CloseIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 30px;
+  right: 45px;
+  transition: transform 0.5s ease;
+  z-index: 5;
+  background: var(--primary);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+
+  &:hover {
+    transform: rotate(180deg);
+  }
+`;
+
+const Close = styled(CgClose)`
+  font-size: 24px;
+  color: #ffffff;
+`;
+
 const CartContainer = styled(motion.div)`
-  min-width: 500px;
+  width: 100%;
   background: #f1f1f1;
   padding: 24px;
   overflow-y: scroll;
@@ -48,6 +74,10 @@ const CartContainer = styled(motion.div)`
 
   &::-webkit-scrollbar {
     display: none;
+  }
+  @media (min-width: 768px) {
+    width: unset;
+    min-width: 500px;
   }
 `;
 
@@ -133,6 +163,10 @@ const Cart = () => {
     await stripe.redirectToCheckout({ sessionId: data.id });
   };
 
+  const toggleCartX = () => {
+    toggleCart();
+  };
+
   return (
     <CartWrapper
       initial={{ opacity: 0 }}
@@ -148,6 +182,9 @@ const Cart = () => {
         transition={{ type: "tween" }}
         onClick={(e) => e.stopPropagation()}
       >
+        <CloseIcon onClick={toggleCartX}>
+          <Close />
+        </CloseIcon>
         {cartIsEmpty && (
           <EmptyContainer
             initial={{ opacity: 0, scale: 0.5 }}

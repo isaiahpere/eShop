@@ -2,6 +2,7 @@ import { Provider, createClient } from "urql";
 import Navbar from "../components/navbar/Navbar";
 import { CartContextProvider } from "../utilities/context/context";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
+import { Toaster } from "react-hot-toast";
 
 import "../styles/globals.css";
 
@@ -12,6 +13,7 @@ export default function App({ Component, pageProps }) {
     <UserProvider>
       <CartContextProvider>
         <Provider value={client}>
+          <Toaster />
           <Navbar />
           <Component {...pageProps} />
         </Provider>

@@ -42,7 +42,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>ecommerce app</title>
+        <title>eShop</title>
         <meta name="description" content="ecommerce app" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

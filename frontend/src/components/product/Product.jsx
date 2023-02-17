@@ -7,6 +7,13 @@ const ProductContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 1rem;
+  border-radius: 24px;
+  box-shadow: 0 2px 2px 0px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 const ImageContainer = styled.div``;
